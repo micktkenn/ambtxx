@@ -1,0 +1,1 @@
+{"name":"@amlbt/validation","version":"0.1.0","private":true,"type":"module","exports":{".":"./src/index.ts"},"scripts":{"typecheck":"tsc --noEmit","build":"tsc -p tsconfig.json"},"dependencies":{"zod":"^3.24.1"},"devDependencies":{"@amlbt/tsconfig":"workspace:*","typescript":"^5.7.2"}}

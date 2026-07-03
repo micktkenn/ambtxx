@@ -1,0 +1,9 @@
+{
+  "name": "AMLBT P2P Exchange",
+  "short_name": "AMLBT",
+  "theme_color": "#2584FF",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "start_url": "/dashboard",
+  "icons": []
+}
