@@ -1,1 +1,0 @@
-{"extends":"@amlbt/tsconfig/react-library.json","include":["src"]}

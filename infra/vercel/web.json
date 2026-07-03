@@ -1,6 +1,0 @@
-{
-  "project": "amlbt-web",
-  "rootDirectory": "apps/web",
-  "framework": "nextjs",
-  "buildCommand": "cd ../.. && pnpm build --filter @amlbt/web"
-}

@@ -1,6 +1,0 @@
-{
-  "project": "amlbt-admin",
-  "rootDirectory": "apps/admin",
-  "framework": "nextjs",
-  "buildCommand": "cd ../.. && pnpm build --filter @amlbt/admin"
-}
