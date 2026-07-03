@@ -2,62 +2,78 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
 import { cn } from "@amlbt/ui";
 
-const nav = [
-  { label: "Home", href: "/dashboard", icon: "🏠" },
-  { label: "Market", href: "/market", icon: "📈" },
-  { label: "Orders", href: "/orders", icon: "🧾" },
-  { label: "Wallet", href: "/wallet", icon: "👛" },
-  { label: "Profile", href: "/settings", icon: "👤" }
+const topNav = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Market", href: "/market" },
+  { label: "Orders", href: "/orders" },
+  { label: "Wallet", href: "/wallet" },
+  { label: "Disputes", href: "/disputes" },
+  { label: "Help", href: "/support" }
 ];
 
-const desktopNav = [
-  ...nav,
-  { label: "My Ads", href: "/ads", icon: "📣" },
-  { label: "Disputes", href: "/disputes", icon: "⚖️" },
-  { label: "Support", href: "/support", icon: "💬" },
-  { label: "Onboarding", href: "/onboarding", icon: "✅" },
-  { label: "Notifications", href: "/notifications", icon: "🔔" }
+const mobileNav = [
+  { label: "Home", href: "/dashboard", icon: "⌂" },
+  { label: "Market", href: "/market", icon: "⇅" },
+  { label: "Wallet", href: "/wallet", icon: "▣" },
+  { label: "Orders", href: "/orders", icon: "▤" },
+  { label: "Profile", href: "/settings", icon: "○" }
 ];
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <div className="min-h-dvh bg-amlbt-muted text-amlbt-text">
-      <aside className="fixed inset-y-0 left-0 hidden w-60 border-r border-amlbt-border-soft bg-white p-4 md:block">
-        <Link href="/dashboard" className="mb-6 flex items-center gap-2 font-bold">
-          <span className="grid h-8 w-8 place-items-center rounded-xl bg-amlbt-primary text-white">A</span>
-          AMLBT
-        </Link>
-        <nav className="space-y-1">
-          {desktopNav.map((item) => (
-            <Link key={item.href} href={item.href} className={cn("flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-amlbt-text-muted", isActive(item.href) && "bg-amlbt-primary-soft text-amlbt-primary-dark")}>
-              <span>{item.icon}</span>
-              {item.label}
+    <div className="min-h-dvh bg-[#f8fafc] text-slate-950">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex h-[76px] max-w-[1520px] items-center justify-between px-4 md:px-8">
+          <Link href="/dashboard" className="flex items-center gap-3 text-3xl font-black tracking-tight text-blue-700">
+            <span className="text-4xl leading-none">ᗩ</span>
+            <span>AMLBT</span>
+          </Link>
+          <nav className="hidden items-center gap-9 lg:flex">
+            {topNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "relative flex h-[76px] items-center text-sm font-bold text-slate-600 transition hover:text-blue-700",
+                  isActive(item.href) && "text-blue-700 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-1 after:rounded-t-full after:bg-blue-600"
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center gap-4">
+            <button className="hidden h-10 w-10 place-items-center rounded-full text-xl text-slate-700 hover:bg-slate-100 md:grid">⌕</button>
+            <button className="relative grid h-10 w-10 place-items-center rounded-full text-xl text-slate-700 hover:bg-slate-100">
+              ♧
+              <span className="absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full bg-red-500 text-[10px] font-black text-white">3</span>
+            </button>
+            <Link href="/settings" className="hidden items-center gap-3 rounded-full py-1 pl-1 pr-3 hover:bg-slate-50 md:flex">
+              <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-slate-800 to-slate-950 text-lg text-white">👨🏽</span>
+              <span className="text-sm font-bold text-slate-700">Abel Tesfaye</span>
+              <span className="text-slate-400">⌄</span>
             </Link>
-          ))}
-        </nav>
-      </aside>
-      <div className="md:pl-60">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-amlbt-border-soft bg-white/95 px-4 backdrop-blur md:h-16 md:px-6">
-          <div>
-            <div className="font-semibold">AMLBT</div>
-            <div className="hidden text-xs text-amlbt-text-muted sm:block">Secure P2P escrow trading</div>
+            <button className="grid h-10 w-10 place-items-center rounded-full text-2xl lg:hidden">☰</button>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="hidden rounded-full border border-green-200 bg-amlbt-success-soft px-2 py-1 text-xs font-semibold text-amlbt-success sm:inline-flex">KYC L2</span>
-            <button className="grid h-9 w-9 place-items-center rounded-xl border border-amlbt-border bg-white">🔔</button>
-          </div>
-        </header>
-        <main className="mx-auto max-w-7xl px-4 py-4 pb-24 md:px-6 md:py-6 md:pb-8">{children}</main>
-      </div>
-      <nav className="fixed inset-x-0 bottom-0 z-40 grid h-16 grid-cols-5 border-t border-amlbt-border-soft bg-white md:hidden">
-        {nav.map((item) => (
-          <Link key={item.href} href={item.href} className={cn("flex flex-col items-center justify-center gap-0.5 text-[11px] font-medium text-amlbt-text-muted", isActive(item.href) && "text-amlbt-primary-dark")}>
-            <span className={cn("grid h-6 w-6 place-items-center rounded-lg bg-slate-100", isActive(item.href) && "bg-amlbt-primary-soft")}>{item.icon}</span>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-[1520px] px-4 py-6 pb-24 md:px-8 lg:py-8">{children}</main>
+
+      <nav className="fixed inset-x-0 bottom-0 z-50 grid h-[74px] grid-cols-5 border-t border-slate-200 bg-white lg:hidden">
+        {mobileNav.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn("flex flex-col items-center justify-center gap-1 text-[11px] font-semibold text-slate-500", isActive(item.href) && "text-blue-700")}
+          >
+            <span className={cn("grid h-7 w-7 place-items-center rounded-lg text-lg", isActive(item.href) && "bg-blue-50")}>{item.icon}</span>
             {item.label}
           </Link>
         ))}
