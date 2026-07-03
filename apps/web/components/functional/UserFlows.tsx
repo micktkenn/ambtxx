@@ -21,7 +21,7 @@ import {
   users,
   wallet as seedWallet
 } from "@amlbt/mock-data";
-import { createPersistentAd, createPersistentOrder, openPersistentDispute, recordUserActivity, sendPersistentOrderMessage, updatePersistentOrderStatus, getSnapshotModeLabel, loadSnapshot, resetSnapshot, saveSnapshot } from "@amlbt/supabase";
+import { createPersistentAd, createPersistentOrder, openPersistentDispute, recordUserActivity, sendPersistentOrderMessage, updatePersistentOrderStatus, getSnapshotModeLabel, loadSnapshot, resetSnapshot, saveSnapshot, scheduleWebStateTableSync } from "@amlbt/supabase";
 import { Badge, Button, Card, ChatPanel, Input, Select, SoftCard, StatusBadge, Textarea, Timeline } from "@amlbt/ui";
 
 type LogItem = { id: string; message: string; tone?: "success" | "warning" | "danger" | "primary" | "neutral"; at: string };
@@ -111,6 +111,15 @@ function useWebState() {
         setSource("local-storage");
         setSyncError(error instanceof Error ? error.message : "Failed to save Supabase state");
       });
+
+    // v0.6: auto-sync important user data tables after any UI state change.
+    // A user click updates local UI immediately, then this writes ads/orders/chat/disputes/evidence/etc.
+    // to normal Supabase tables without requiring a reset/database page.
+    scheduleWebStateTableSync(state, (result) => {
+      if (result.errors.length) {
+        setSyncError(`Table sync warnings: ${result.errors.slice(0, 3).join(" | ")}`);
+      }
+    });
   }, [state, ready]);
 
   const log = (message: string, tone: LogItem["tone"] = "success") => {

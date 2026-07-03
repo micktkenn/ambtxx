@@ -1,4 +1,5 @@
 import { createSupabaseBrowserClient, isSupabaseConfigured } from "./client";
+import { enqueueRemoteAction } from "./remote-action-engine";
 import type { Json } from "./database.types";
 
 export type ActivityActorType = "user" | "admin" | "system";
@@ -46,6 +47,22 @@ export function getLocalActivityEvents() {
 
 export async function recordActivity(input: ActivityInput) {
   saveLocalActivity(input);
+
+  // v0.6: every UI action is also stored in action_outbox.
+  // This means any button that calls log()/recordUserActivity()/recordAdminActivity()
+  // leaves a remote database trail automatically when Supabase is configured.
+  void enqueueRemoteAction({
+    app: input.app,
+    actorType: input.actorType,
+    actorId: input.actorId,
+    actorName: input.actorName,
+    actionKey: input.action,
+    operation: "activity",
+    targetType: input.targetType ?? "ui",
+    targetId: input.targetId ?? "prototype",
+    payload: input.payload,
+    tone: input.tone,
+  });
 
   if (!isSupabaseConfigured()) {
     return { source: "local-storage" as const };

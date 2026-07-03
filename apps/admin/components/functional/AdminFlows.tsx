@@ -25,7 +25,7 @@ import {
   systemSettings as seedSystemSettings,
   users as seedUsers
 } from "@amlbt/mock-data";
-import { getSnapshotModeLabel, loadSnapshot, resetSnapshot, saveSnapshot, recordAdminActivity, updatePersistentProfileStatus } from "@amlbt/supabase";
+import { getSnapshotModeLabel, loadSnapshot, resetSnapshot, saveSnapshot, recordAdminActivity, updatePersistentProfileStatus, scheduleAdminStateTableSync } from "@amlbt/supabase";
 import { Badge, Button, Card, DataTable, Input, Select, SoftCard, StatusBadge, Textarea } from "@amlbt/ui";
 
 type Tone = "success" | "warning" | "danger" | "primary" | "neutral";
@@ -116,6 +116,15 @@ function useAdminState() {
         setSource("local-storage");
         setSyncError(error instanceof Error ? error.message : "Failed to save admin state");
       });
+
+    // v0.6: auto-sync admin data tables after any admin UI state change.
+    // Every freeze/approve/resolve/toggle/publish/test action writes to Supabase tables
+    // plus activity_events/admin_audit_logs automatically.
+    scheduleAdminStateTableSync(state, (result) => {
+      if (result.errors.length) {
+        setSyncError(`Table sync warnings: ${result.errors.slice(0, 3).join(" | ")}`);
+      }
+    });
   }, [ready, state]);
 
   const log = (message: string, tone: Tone = "success") => {

@@ -22,3 +22,37 @@ export {
   updatePersistentProfileStatus,
   createPersistentNotification
 } from "@amlbt/supabase";
+
+// v0.6 concrete remote action layer. These are the files to call from buttons/forms
+// when replacing mock UI actions with normalized Supabase writes.
+export {
+  runRemoteTableAction,
+  enqueueRemoteAction,
+  getLocalRemoteActionOutbox,
+  persistWebActivity,
+  persistAdCreateRemote,
+  persistAdStatusRemote,
+  persistOrderCreateRemote,
+  persistOrderStatusRemote,
+  persistOrderEventRemote,
+  persistOrderMessageRemote,
+  persistEvidenceRemote,
+  persistDisputeOpenRemote,
+  persistPaymentMethodRemote,
+  persistSupportTicketRemote,
+  persistAdminActivityRemote,
+  persistAdminAuditRemote,
+  persistAdminUserStatusRemote,
+  persistAdminKycDecisionRemote,
+  persistAdminDisputeDecisionRemote,
+  persistAdminAdStatusRemote,
+  persistAdminFeeRuleRemote,
+  persistAdminConfigStatusRemote,
+  persistAdminRiskFlagRemote,
+  persistAdminSystemSettingRemote,
+  persistAdminSupportTicketRemote,
+  syncWebStateTables,
+  syncAdminStateTables,
+  scheduleWebStateTableSync,
+  scheduleAdminStateTableSync
+} from "@amlbt/supabase";
